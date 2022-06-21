@@ -7,9 +7,8 @@ if __name__ =="__main__":
         btn=event.widget
         num=btn["text"]
         if num=="=":#=の対応
-            eqn=entry.get()
+            res=eval(entry.get())
             entry.delete(0,tk.END)
-            res=eval(eqn)
             entry.insert(tk.END,res)
         elif num=="C":#クリアの対応
             entry.delete(0,tk.END)
@@ -27,7 +26,7 @@ if __name__ =="__main__":
     #root.geometry(300,500)
     r=1
 
-    for c,i in enumerate(["","","税","C",7,8,9,"+",4,5,6,"-",1,2,3,"×",0,"","=","÷"]):
+    for c,i in enumerate([["",""],"税","C",7,8,9,"+",4,5,6,"-",1,2,3,"×",0,"","=","÷"]):
         #ボタンの設定
         button=tk.Button(root,
                       text=f"{i}",

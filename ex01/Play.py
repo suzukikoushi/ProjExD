@@ -1,6 +1,9 @@
 import random
 moji=10
 kesson=2
+kaisuu=10
+
+
 def wards():
     w=[]
     t=[]
@@ -13,8 +16,10 @@ def wards():
         del x
         n-1
     return(t)
-def b(t):
+def kesson(t):
     k=[]
-    for i in range(kaisuu):
+    for i in range(kesson):
          k+=t[random.randint(0,len(t))]
     return(k)
+def kaitou():
+    

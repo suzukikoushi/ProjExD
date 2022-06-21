@@ -27,7 +27,7 @@ if __name__ =="__main__":
     #root.geometry(300,500)
     r=1
 
-    for c,i in enumerate(["","","","C",7,8,9,"+",4,5,6,"-",1,2,3,"×",0,"","=","÷"]):
+    for c,i in enumerate(["","","税","C",7,8,9,"+",4,5,6,"-",1,2,3,"×",0,"","=","÷"]):
         #ボタンの設定
         button=tk.Button(root,
                       text=f"{i}",

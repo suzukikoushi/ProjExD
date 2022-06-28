@@ -40,7 +40,7 @@ if __name__ =="__main__":
     root=tk.Tk()
     root.title("迷えるこうかとん")
 
-    canvas=tk.Canvas(root,width=1700,height=1100,bg="black")#ウィンドウを作る
+    canvas=tk.Canvas(root,width=1500,height=900,bg="black")#ウィンドウを作る
     canvas.pack()
     x,y=15,9    #迷路の大きさ
     maze_bg=mm.make_maze(x,y)

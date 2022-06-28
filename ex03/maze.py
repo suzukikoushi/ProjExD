@@ -1,6 +1,6 @@
 
 import tkinter as tk
-import tkinter.messagebox as tkm
+import maze_maker as mm
 
 def key_down(event):
     global key
@@ -13,15 +13,15 @@ def key_up(event):
 def main_proc():
     global cx,cy
     if key=="Right":
-        cx=cx+1
+        cx=cx+20
     elif key=="Left":
-        cx=cx-1
+        cx=cx-20
     elif key=="Up":
-        cy=cy-1
+        cy=cy-20
     elif key=="Down":
-        cy=cy+1
+        cy=cy+20
     canvas.coords("tori",cx,cy)
-    root.after(5,main_proc)
+    root.after(100,main_proc)
 
 if __name__ =="__main__":
     root=tk.Tk()
@@ -29,6 +29,9 @@ if __name__ =="__main__":
 
     canvas=tk.Canvas(root,width=1500,height=900,bg="black")
     canvas.pack()
+
+    maze_bg=mm.make_maze(15,9)
+    mm.show_maze(canvas,maze_bg)
 
     tori = tk.PhotoImage(file="fig/2.png")
     cx,cy=300,400

@@ -12,14 +12,16 @@ def key_up(event):
 
 def main_proc():
     global cx,cy,my,mx
-    if key=="Right":
-        cx=cx+100
-    elif key=="Left":
-        cx=cx-100
-    elif key=="Up":
-        cy=cy-100
-    elif key=="Down":
-        cy=cy+100
+        
+    if key=="Right" and maze_bg[my][mx+1]==0:
+        mx+=1
+    elif key=="Left" and maze_bg[my][mx-1]==0:
+        mx-=1
+    elif key=="Up" and maze_bg[my-1][mx]==0:
+        my-=1
+    elif key=="Down" and maze_bg[my+1][mx]==0:
+        my+=1
+    cx,cy=mx*100+50,my*100+50
     canvas.coords("tori",cx,cy)
     root.after(100,main_proc)
 
@@ -36,7 +38,7 @@ if __name__ =="__main__":
     tori = tk.PhotoImage(file="fig/2.png")
     mx,my=1,1
     cx,cy=mx*100+50,my*100+50
-    canvas.create_image(cx,cy,image=tori,tag="tori")
+    canvas.create_image(mx,my,image=tori,tag="tori")
 
     key=" "
     root.bind("<KeyPress>",key_down)

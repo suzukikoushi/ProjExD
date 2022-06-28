@@ -11,15 +11,15 @@ def key_up(event):
     key=" "
 
 def main_proc():
-    global cx,cy
+    global cx,cy,my,mx
     if key=="Right":
-        cx=cx+20
+        cx=cx+100
     elif key=="Left":
-        cx=cx-20
+        cx=cx-100
     elif key=="Up":
-        cy=cy-20
+        cy=cy-100
     elif key=="Down":
-        cy=cy+20
+        cy=cy+100
     canvas.coords("tori",cx,cy)
     root.after(100,main_proc)
 
@@ -34,7 +34,8 @@ if __name__ =="__main__":
     mm.show_maze(canvas,maze_bg)
 
     tori = tk.PhotoImage(file="fig/2.png")
-    cx,cy=300,400
+    mx,my=1,1
+    cx,cy=mx*100+50,my*100+50
     canvas.create_image(cx,cy,image=tori,tag="tori")
 
     key=" "

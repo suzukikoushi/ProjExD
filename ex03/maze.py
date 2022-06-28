@@ -1,5 +1,6 @@
 
 import tkinter as tk
+import tkinter.messagebox as tkm
 import maze_maker as mm
 import random
 import sys
@@ -34,8 +35,9 @@ def gall():
         maze_bg[my-1][mx]=1
         maze_bg[my][mx+1]=1
         maze_bg[my][mx-1]=1
-        if key=="space":
-            sys.exit()
+        tkm.showinfo("ゴール","ゴールしました。")
+        
+        sys.exit()
 if __name__ =="__main__":
     root=tk.Tk()
     root.title("迷えるこうかとん")

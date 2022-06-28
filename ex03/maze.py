@@ -36,7 +36,6 @@ def gall():
         maze_bg[my][mx+1]=1
         maze_bg[my][mx-1]=1
         tkm.showinfo("ゴール","ゴールしました。")
-        
         sys.exit()
 if __name__ =="__main__":
     root=tk.Tk()

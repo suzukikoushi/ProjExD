@@ -2,12 +2,15 @@ from os import kill
 import pygame as pg
 import sys
 import random
+import tkinter as tk
 import tkinter.messagebox as tkm
 
 def main():
     clock=pg.time.Clock()
     
     pg.display.set_caption("逃げろ！こうかとん")
+    root = tk.Tk()
+    root.withdraw()
     screen_sfc=pg.display.set_mode((1500,900))
     screen_rct=screen_sfc.get_rect()
     bgimg_sfc=pg.image.load("fig/pg_bg.jpg")
@@ -69,7 +72,7 @@ def main():
         vy *= tate
 
         if kkimag_rct.colliderect(bmimg_rct):
-            tkm.showinfo("GAME OVER","おわおわりでぇす")
+            tkm.showinfo("GAME OVER","おわおわりでぇす")#ゲームオーバー時にメッセージボックスの表示
             sys.exit()
 
         pg.display.update()
@@ -91,6 +94,5 @@ def check_bound(rct,scr_rct):
 if __name__ == "__main__":
     pg.init()
     main()
-    #tkm.showinfo("終わり","ゲームオーバー")
     pg.quit()
     sys.exit()

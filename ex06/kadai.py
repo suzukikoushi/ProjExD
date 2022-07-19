@@ -18,6 +18,8 @@ class Screen:
         self.sfc.blit(self.bgi_sfc, self.bgi_rct)
 
 class Deal:
+    def __init__(self,hand:list,label:list,hito):
+        self.sfc1=pg.image.load(f"./fig/トランプ/{label[0]}/{hand[0]}")
     def deal(): #最初にカードを配る関数
         phand = []
         for i in range(2):

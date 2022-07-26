@@ -8,7 +8,7 @@ def main():
     pg.display.set_caption("初めてのpygame")
     screen=pg.display.set_mode((800,600))
 
-    tori_img=pg.image.load("fig/6.png")
+    tori_img=pg.image.load("./fig/6.png")
     tori_img=pg.transform.rotozoom(tori_img,0,2.0)
     tori_rect=tori_img.get_rect()
     tori_rect.center=900,400

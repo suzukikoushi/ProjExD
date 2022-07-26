@@ -8,7 +8,7 @@ def button_click(event):
     txt=btn["text"]
     tkm.showinfo(txt,f"[{txt}]ボタンが押されました")
 root=tk.Tk()
-#root.title("おためし")#タイトルを付ける
+root.title("おためし")#タイトルを付ける
 root.geometry("500x200")#ウィンドウのサイズ(幅x高さ)
 
 label=tk.Label(root,

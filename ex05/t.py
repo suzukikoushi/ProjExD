@@ -1,26 +1,30 @@
 import pygame as pg
 import sys
 import random
-
+import math
+import tkinter as tk
+import tkinter.messagebox as tkm
 
 class Screen:
     def __init__(self, title, wh, image):
         pg.display.set_caption(title)
-        self.sfc = pg.display.set_mode(wh)     # Surface
-        self.rct = self.sfc.get_rect()         # Rect
+        self.sfc = pg.display.set_mode(wh) # Surface
+        self.rct = self.sfc.get_rect()            # Rect
         self.bgi_sfc = pg.image.load(image)    # Surface
-        self.bgi_rct = self.bgi_sfc.get_rect() # Rect
+        self.bgi_rct = self.bgi_sfc.get_rect()              # Rect
+        self.sfc.blit(self.bgi_sfc, self.bgi_rct)
 
     def blit(self):
         self.sfc.blit(self.bgi_sfc, self.bgi_rct)
 
 
 class Bird:
-    def __init__(self, image: str, size: float, xy):
+    def __init__(self, image, size, xy):
         self.sfc = pg.image.load(image)    # Surface
         self.sfc = pg.transform.rotozoom(self.sfc, 0, size)  # Surface
         self.rct = self.sfc.get_rect()          # Rect
         self.rct.center = xy
+
 
     def blit(self, scr: Screen):
         scr.sfc.blit(self.sfc, self.rct)
@@ -35,22 +39,23 @@ class Bird:
             self.rct.centerx -= 1
         if key_states[pg.K_RIGHT]: 
             self.rct.centerx += 1
-        # # 練習7
+
+        # 練習7
         if check_bound(self.rct, scr.rct) != (1, 1): # 領域外だったら
             if key_states[pg.K_UP]: 
                 self.rct.centery += 1
-            if key_states[pg.K_DOWN]: 
+            if key_states[pg.K_DOWN] : 
                 self.rct.centery -= 1
-            if key_states[pg.K_LEFT]: 
+            if key_states[pg.K_LEFT] : 
                 self.rct.centerx += 1
-            if key_states[pg.K_RIGHT]: 
+            if key_states[pg.K_RIGHT] : 
                 self.rct.centerx -= 1
         self.blit(scr)
 
 
 class Bomb:
     def __init__(self, color, size, vxy, scr: Screen):
-        self.sfc = pg.Surface((2*size, 2*size)) # Surface
+        self.sfc = pg.Surface((2 * size, 2 * size)) # Surface
         self.sfc.set_colorkey((0, 0, 0)) 
         pg.draw.circle(self.sfc, color, (size, size), size)
         self.rct = self.sfc.get_rect() # Rect
@@ -67,59 +72,84 @@ class Bomb:
         # 練習7
         yoko, tate = check_bound(self.rct, scr.rct)
         self.vx *= yoko
-        self.vy *= tate   
+        self.vy *= tate
         # 練習5
-        self.blit(scr)          
+        self.blit(scr)
+
+
+class Enemy:
+    def __init__(self, size, vxy, scr: Screen):
+        self.sfc = pg.image.load("fig/washi.png")
+        self.sfc = pg.transform.rotozoom(self.sfc, 0, size)
+        self.rct = self.sfc.get_rect()
+        self.rct.centerx = random.randint(20, scr.rct.width - 20)
+        self.rct.centery = random.randint(20, scr.rct.height - 20)
+        self.vx, self.vy = vxy
+
+    def blit(self, scr: Screen):
+        scr.sfc.blit(self.sfc, self.rct)
+
+    def update(self, scr: Screen):
+        self.rct.move_ip(self.vx, self.vy)
+        yoko, tate = check_bound(self.rct, scr.rct)
+        self.vx *= yoko
+        self.vy *= tate
+        self.blit(scr)
 
 
 class Beam:
-    def __init__(self,chr:Bird,key):
-        self.sfc = pg.image.load("fig/genkidama.png")    # Surface
-        self.sfc = pg.transform.rotozoom(self.sfc,0,0.3)  # Surface
+    def __init__(self, chr: Bird):
+        self.sfc = pg.image.load("fig/beam.png")    # Surface
+        self.sfc = pg.transform.rotozoom(self.sfc, 0, 0.05)  # Surface
         self.rct = self.sfc.get_rect()          # Rect
         self.rct.center = chr.rct.center
-        if key==pg.K_a:
-            self.key="Left"
-        if key==pg.K_s:
-            self.key="Right" 
-
-    def blit(self,scr:Screen):
-        scr.sfc.blit(self.sfc, self.rct)
+        mx, my = pg.mouse.get_pos()
+        sign = math.atan2(chr.rct.centery - my, chr.rct.centerx - mx)
+        self.vx = -10 * math.cos(sign)
+        self.vy = -10 * math.sin(sign)
         
-    def update(self, scr: Screen,):
-        if self.key=="Left":
-            self.rct.centerx -= 10  
-        else:
-            self.rct.centerx += 10  
+    def blit(self, scr: Screen):
         scr.sfc.blit(self.sfc, self.rct)
+
+    def update(self, scr: Screen):
+        self.rct.move_ip(self.vx, self.vy)
         self.blit(scr)
 
 
 
 def main():
     clock = pg.time.Clock()
-    scr = Screen("逃げろ！こうかとん", (1600, 900), "fig/pg_bg.jpg")
-    kkt = Bird("fig/6.png", 2.0, (900, 400))
-    bkd = Bomb((255,0,0), 10, (+1,+1), scr)
-    bem=None
+    scr = Screen("逃げろこうかとん", (1600, 900), "fig/bg.jpg")
+    kkt = Bird("fig/6.png", 2.0, (900,400))
+    bkb = Bomb((255, 0, 0), 10, (+1, +1), scr)
+    em = Enemy(0.5, (+1.7, +1.7), scr)
+    bm = None
+
     while True:
         scr.blit()
 
-        # 練習2
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
-            if event.type ==pg.KEYDOWN and event.key == pg.K_s :
-                bem=Beam(kkt,event.key)
-            if event.type ==pg.KEYDOWN and event.key == pg.K_a :
-                bem=Beam(kkt,event.key)
+            if event.type == pg.MOUSEBUTTONDOWN:
+                bm  = Beam(kkt)
+
 
         kkt.update(scr)
-        if bem!=None:
-            bem.update(scr)
-        bkd.update(scr)
-        if kkt.rct.colliderect(bkd.rct):
+        bkb.update(scr)
+        em.update(scr)
+
+        if bm:
+            bm.update(scr)
+        if kkt.rct.colliderect(bkb.rct):
+            tkm.showinfo("GameOver", f"残念また遊んでね！")
             return
+        if kkt.rct.colliderect(em.rct):
+            tkm.showinfo("GameOver", f"残念また遊んでね！")
+            return
+        """if em.rct.colliderect(bm.rct):
+            tkm.showinfo("GameClear", f"おめでとう！！")
+            return"""
 
         pg.display.update()
         clock.tick(1000)
@@ -137,7 +167,10 @@ def check_bound(rct, scr_rct):
     return yoko, tate
 
 
+
 if __name__ == "__main__":
+    root = tk.Tk()
+    root.withdraw()
     pg.init()
     main()
     pg.quit()
